@@ -8,6 +8,6 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./app /code/app
 
-COPY ./app/mock_db/items.json /code/mock_db/items.json
+COPY ./app/items.json /code/app/items.json
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]

@@ -1,9 +1,9 @@
 import os
 import json
-from schemes import Item
+from app.schemes import Item
 from fastapi import FastAPI
 
-file_path = os.path.join(os.path.dirname(__file__), 'mock_db/items.json')
+file_path = os.path.join(os.path.dirname(__file__), 'items.json')
 app = FastAPI()
 
 with open(file_path, 'r') as f:
@@ -12,7 +12,7 @@ with open(file_path, 'r') as f:
 @app.get("/")
 def read_root():
     return {
-        "Hello": "Form My Kubernetes App"
+        "Hello": "From My Kubernetes App"
     }
 
 @app.get("/items/")
@@ -32,13 +32,13 @@ def create_item(item: Item):
         "price": item.price
     }
     items.append(new_item)
-    with open('mock_db/items.json', 'w') as f:
+    with open('items.json', 'w') as f:
         json.dump(items, f)
     return new_item
 
 @app.get("/items/{item_id}")
 async def get_item_by_id(item_id: int):
-    item = [i for i in items if i['id' == item_id]]
+    item = [i for i in items if i['id'] == item_id]
     return item[0] if len(item) > 0 else {}
 
 @app.put("/items/{item_id}")
@@ -46,7 +46,7 @@ async def update_item(item_id: int, item: Item):
     for i, db_item in enumerate(items):
         if db_item["id"] == item.id:
             items[i] = item.model_dump()
-            with open('mock_db/items.json', 'w') as f:
+            with open('items.json', 'w') as f:
                 json.dump(items, f)
             return {
                 "message": "Item updated successfully!"
@@ -57,7 +57,7 @@ async def remove_item(item_id: int):
     for i, item in enumerate(items):
         if item["id"] == item.id:
             items.pop(i)
-            with open("mock_db/items.json", 'w') as f:
+            with open("items.json", 'w') as f:
                 json.dump(items, f)
             
             return {
